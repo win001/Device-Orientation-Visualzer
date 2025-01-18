@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Motion Sensor</title>
+    <script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .image-container {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .sensor-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .gradient-text {
+            font-size: 1.5em;
+            text-align: center;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96C93D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 10px;
+            line-height: 1.5;
+            max-width: 600px;
+            animation: gradient 5s ease infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .gradient-text {
+                font-size: 1.2em;
+            }
+            .image-container {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Motion Visualizer</h1>
+        
+        <div class="image-container">
+            <img src="https://web.dev/static/articles/device-orientation/image/illustration-device-coor-9952f2421cc29.png" alt="Motion Sensor" class="sensor-image">
+        </div>
+
+        <p class="gradient-text">
+            Experience real-time motion tracking with our advanced sensor visualization system. 
+            Tilt, rotate, and move your device to see the magic happen!
+        </p>
+    </div>
+
+    <script>
+        const socket = io();
+        // Function to handle motion data
+        window.addEventListener('deviceorientation', (event) => {
+            const data = {
+                alpha: event.alpha,  // Rotation around z-axis
+                beta: event.beta,    // Rotation around x-axis
+                gamma: event.gamma   // Rotation around y-axis
+            };
+            socket.emit('motion_data', data);  // Send motion data to server
+        });
+    </script>
+</body>
+</html>
